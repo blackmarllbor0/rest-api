@@ -1,8 +1,13 @@
 package service
 
-import "github.com/go-rest-api/pkg/repository"
+import (
+	restgo "github.com/go-rest-api"
+	"github.com/go-rest-api/pkg/repository"
+)
 
-type Authorization interface{}
+type Authorization interface {
+	CreateUser(user restgo.User) (int, error)
+}
 
 type TodoList interface{}
 
@@ -15,5 +20,7 @@ type Service struct {
 }
 
 func NewService(repo *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Authorization: NewAuthService(repo.Authorization),
+	}
 }

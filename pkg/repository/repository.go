@@ -1,8 +1,13 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	restgo "github.com/go-rest-api"
+	"github.com/jmoiron/sqlx"
+)
 
-type Authorization interface{}
+type Authorization interface {
+	CreateUser(user restgo.User) (int, error)
+}
 
 type TodoList interface{}
 
@@ -14,6 +19,8 @@ type Repository struct {
 	TodoItem
 }
 
-func NewRepository(db *sqlx.DB) (*Repository, *Repository) {
-	return &Repository{}, nil
+func NewRepository(db *sqlx.DB) *Repository {
+	return &Repository{
+		Authorization: NewAuthPostgres(db),
+	}
 }
